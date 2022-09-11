@@ -1,4 +1,23 @@
 jQuery(function ($) {
+  var filterType = JSON.parse(localStorage.getItem('filterType')) != null ? JSON.parse(localStorage.getItem('filterType')) : [];
+  var filterCategory = JSON.parse(localStorage.getItem('filterCategory')) != null ? JSON.parse(localStorage.getItem('filterCategory')) : [];
+  var filterCountry = JSON.parse(localStorage.getItem('filterCountry')) != null ? JSON.parse(localStorage.getItem('filterCountry')) : [];
+  $("input[name='filter_type[]']").each(function(){
+    if(filterType.includes($(this).val())) {
+      $(this).attr('checked', true);
+    }
+  });
+  $("input[name='filter_category[]']").each(function(){
+    if(filterCategory.includes($(this).val())) {
+      $(this).attr('checked', true);
+    }
+  });
+  $("input[name='filter_country[]']").each(function(){
+    if(filterCountry.includes($(this).val())) {
+      $(this).attr('checked', true);
+    }
+  });
+
   const buttonGetListMovies = $("div#get_list_movies");
   const inputPageFrom = $("input[name=page_from]");
   const inputPageTo = $("input[name=page_to]");
@@ -126,4 +145,28 @@ jQuery(function ($) {
       }
     });
   };
+
+  $("input[name='filter_type[]']").change(() => {
+    var saveFilterData = [];
+    $("input[name='filter_type[]']:checked").each(function(){
+      saveFilterData.push($(this).val());
+    });
+    localStorage.setItem('filterType', JSON.stringify(saveFilterData));
+  })
+
+  $("input[name='filter_category[]']").change(() => {
+    var saveFilterData = [];
+    $("input[name='filter_category[]']:checked").each(function(){
+      saveFilterData.push($(this).val());
+    });
+    localStorage.setItem('filterCategory', JSON.stringify(saveFilterData));
+  })
+
+  $("input[name='filter_country[]']").change(() => {
+    var saveFilterData = [];
+    $("input[name='filter_country[]']:checked").each(function(){
+      saveFilterData.push($(this).val());
+    });
+    localStorage.setItem('filterCountry', JSON.stringify(saveFilterData));
+  })
 });
