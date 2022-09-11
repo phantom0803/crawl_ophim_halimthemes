@@ -56,10 +56,25 @@ jQuery(function ($) {
     });
   };
 
+  var inputFilterType = [];
+  var inputFilterCategory = [];
+  var inputFilterCountry = [];
+
   buttonCrawlMovies.on("click", () => {
     divMsg.show(300);
     divMsgCrawlSuccess.show(300);
     divMsgCrawlError.show(300);
+
+    $("input[name='filter_type[]']:checked").each(function(){
+      inputFilterType.push($(this).val());
+    });
+    $("input[name='filter_category[]']:checked").each(function(){
+      inputFilterCategory.push($(this).val());
+    });
+    $("input[name='filter_country[]']:checked").each(function(){
+      inputFilterCountry.push($(this).val());
+    });
+
     crawl_movies(false);
   });
   const crawl_movies = () => {
@@ -80,6 +95,9 @@ jQuery(function ($) {
       data: {
         action: "crawl_ophim_movies",
         url: linkCurrent,
+        filterType: inputFilterType,
+        filterCategory: inputFilterCategory,
+        filterCountry: inputFilterCountry,
       },
       beforeSend: function () {
         buttonCrawlMovies.hide(300);
@@ -96,7 +114,7 @@ jQuery(function ($) {
           let currentList = textAreaResultError.val();
           if (currentList != "") currentList += "\n" + linkCurrent;
           else currentList += linkCurrent;
-          textAreaResultError.val(currentList);
+          textAreaResultError.val(currentList + "=====>>" + data.msg);
         }
         crawl_movies();
       },

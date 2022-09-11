@@ -22,7 +22,7 @@
   cursor: pointer;
 }
 .roll:hover, .primary:hover {
-  padding: 4px 18px;
+  opacity: 0.8;
 }
 
 .roll {
@@ -43,4 +43,51 @@
 #list_crawl_error {
   margin: 10px 0;
   width: 100%;
+}
+
+.crawl_filter {
+  padding: 10px
+}
+
+.crawl_filter .filter_title {
+  margin-top: 10px;
+  color: #e43603
+}
+
+.crawl_filter .filter_item {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+}
+.crawl_filter .filter_item label {
+  margin: 2px 0;
+}
+
+@media only screen and (max-width: 1500px) {
+  .crawl_filter .filter_item {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .crawl_filter .filter_item {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .crawl_filter .filter_item {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .crawl_filter .filter_item {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .crawl_filter .filter_item {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

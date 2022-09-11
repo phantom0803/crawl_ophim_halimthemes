@@ -7,6 +7,7 @@
  * Author URI: https://ophim.cc/
  */
 set_time_limit(0);
+define('API_DOMAIN', 'https://ophim1.com');
 define('CRAWL_OPHIM_URL', plugin_dir_url(__FILE__));
 define('CRAWL_OPHIM_PATH', plugin_dir_path(__FILE__));
 

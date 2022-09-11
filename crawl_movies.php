@@ -15,6 +15,12 @@ function tool_add_menu()
 
 function crawl_tools()
 {
+	$categoryFromApi = file_get_contents(API_DOMAIN . "/the-loai");
+	$categoryFromApi = json_decode($categoryFromApi);
+
+	$countryFromApi = file_get_contents(API_DOMAIN . "/quoc-gia");
+	$countryFromApi = json_decode($countryFromApi);
+
 ?>
 	<div class="crawl_main">
 		<div class="crawl_page">
@@ -28,6 +34,41 @@ function crawl_tools()
 				</div>
 			</div>
 		</div>
+		
+		<div class="crawl_filter notice notice-info">
+
+			<div class="filter_title"><strong>Định dạng</strong></div>
+			<div class="filter_item">
+				<label><input type="checkbox" class="" name="filter_type[]" value="single"> Phim lẻ</label>
+				<label><input type="checkbox" class="" name="filter_type[]" value="series"> Phim bộ</label>
+				<label><input type="checkbox" class="" name="filter_type[]" value="hoathinh"> Hoạt hình</label>
+				<label><input type="checkbox" class="" name="filter_type[]" value="tvshows"> Tv shows</label>
+			</div>
+
+			<div class="filter_title"><strong>Bỏ qua thể loại</strong></div>
+			<div class="filter_item">
+				<?php
+					foreach($categoryFromApi as $category) {
+				?>
+						<label><input type="checkbox" class="" name="filter_category[]" value="<?php echo $category->name;?>"> <?php echo $category->name;?></label>
+				<?php
+					}
+				?>
+			</div>
+
+			<div class="filter_title"><strong>Bỏ qua quốc gia</strong></div>
+			<div class="filter_item">
+				<?php
+					foreach($countryFromApi as $country) {
+				?>
+						<label><input type="checkbox" class="" name="filter_country[]" value="<?php echo $country->name;?>"> <?php echo $country->name;?></label>
+				<?php
+					}
+				?>
+			</div>
+
+		</div>
+
 		<div class="crawl_page">
 			Page Crawl: From <input type="number" name="page_from" value="10">
 			To <input type="number" name="page_to" value="1">
@@ -86,7 +127,11 @@ function crawl_ophim_movies()
 		$title 							= explode('|', $data_post)[3];
 		$org_title 					= explode('|', $data_post)[4];
 		$year 							= explode('|', $data_post)[5];
-	
+		
+		$filterType 				= $_POST['filterType'] ?: [];
+		$filterCategory 		= $_POST['filterCategory'] ?: [];
+		$filterCountry 			= $_POST['filterCountry'] ?: [];
+
 		$args = array(
 			'post_type' => 'post',
 			'posts_per_page' => 1,
@@ -168,9 +213,20 @@ function crawl_ophim_movies()
 		$api_url 		= str_replace('ophim.tv', 'ophim1.com', $url);
 		$sourcePage =  HALIMHelper::cURL($api_url);
 		$sourcePage = json_decode($sourcePage, true);
-		$data 			= create_data($sourcePage, $url, $ophim_id, $ophim_update_time);
+		$data 			= create_data($sourcePage, $url, $ophim_id, $ophim_update_time, $filterType, $filterCategory, $filterCountry);
+		if($data['crawl_filter']) {
+			$result = array(
+				'status'				=> false,
+				'post_id' 			=> null,
+				'data'					=> null,
+				'list_episode' 	=> null,
+				'msg' 					=> "Lọc bỏ qua"
+			);
+			echo json_encode($result);
+			die();
+		}
+
 		$post_id 		= add_posts($data);
-	
 		$list_episode = get_list_episode($sourcePage, $post_id);
 		$result = array(
 			'status'				=> true,
@@ -182,7 +238,7 @@ function crawl_ophim_movies()
 		die();
   }catch (Exception $e) {
 		$result = array(
-			'status'				=> true,
+			'status'				=> false,
 			'post_id' 			=> null,
 			'data'					=> null,
 			'list_episode' 	=> null,
@@ -193,15 +249,26 @@ function crawl_ophim_movies()
   }
 }
 
-function create_data($sourcePage, $url, $ophim_id, $ophim_update_time) {
+function create_data($sourcePage, $url, $ophim_id, $ophim_update_time, $filterType = [], $filterCategory = [], $filterCountry = []) {
+	if(in_array($sourcePage["movie"]["type"], $filterType))  {
+		return array(
+			'crawl_filter' => true,
+		);
+	}
+
 	if($sourcePage["movie"]["type"] == "single") {
 		$type = "single_movies";
 	} else {
 		$type	= "tv_series";
 	}
-
+	
 	$arrCat = [];
 	foreach ($sourcePage["movie"]["category"] as $key => $value) {
+		if(in_array($value["name"], $filterCategory))  {
+			return array(
+				'crawl_filter' => true,
+			);
+		}
 		array_push($arrCat, $value["name"]);
 	}
 	if($sourcePage["movie"]["chieurap"] == true) {
@@ -216,6 +283,11 @@ function create_data($sourcePage, $url, $ophim_id, $ophim_update_time) {
 
 	$arrCountry 	= [];
 	foreach ($sourcePage["movie"]["country"] as $key => $value) {
+		if(in_array($value["name"], $filterCountry))  {
+			return array(
+				'crawl_filter' => true,
+			);
+		}
 		array_push($arrCountry, $value["name"]);
 	}
 
@@ -224,6 +296,7 @@ function create_data($sourcePage, $url, $ophim_id, $ophim_update_time) {
 	if($sourcePage["movie"]["name"] != $sourcePage["movie"]["origin_name"]) array_push($arrTags, $sourcePage["movie"]["origin_name"]);
 
 	$data = array(
+		'crawl_filter'						=> false,
 		'fetch_url' 							=> $url,
 		'fetch_ophim_id' 					=> $ophim_id,
 		'fetch_ophim_update_time' => $ophim_update_time,
@@ -280,8 +353,10 @@ function add_posts($data)
 	);
 	$post_id 						= wp_insert_post($post_data);
 
-	$res 								= save_images($data['poster'], $post_id, $data['title']);
-	$poster_image_url 	= str_replace(get_site_url(), '', $res['url']);
+	if($data['poster'] && $data['poster'] != "") {
+		$res 								= save_images($data['poster'], $post_id, $data['title']);
+		$poster_image_url 	= str_replace(get_site_url(), '', $res['url']);
+	}
 	save_images($data['thumbnail'], $post_id, $data['title'], true);
 	$thumb_image_url 		= get_the_post_thumbnail_url($post_id, 'movie-thumb');
 
