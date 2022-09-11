@@ -15,12 +15,24 @@ function tool_add_menu()
 
 function crawl_tools()
 {
-	$categoryFromApi = file_get_contents(API_DOMAIN . "/the-loai");
+
+	$cache = new Cache();
+
+	$categoryFromApi = $cache->readCache(API_DOMAIN . "/the-loai");
+	if(!$categoryFromApi) { // Kiểm tra nếu cache tồn tại
+		$categoryFromApi = file_get_contents(API_DOMAIN . "/the-loai");
+		$cache->timeCache = 86400;
+		$cache->saveCache(API_DOMAIN . "/the-loai", $categoryFromApi); // Lưu cache
+	}
 	$categoryFromApi = json_decode($categoryFromApi);
-
-	$countryFromApi = file_get_contents(API_DOMAIN . "/quoc-gia");
-	$countryFromApi = json_decode($countryFromApi);
-
+	
+	$countryFromApi = $cache->readCache(API_DOMAIN . "/quoc-gia");
+	if(!$countryFromApi) { // Kiểm tra nếu cache tồn tại
+		$countryFromApi = file_get_contents(API_DOMAIN . "/quoc-gia");
+		$cache->timeCache = 86400;
+		$cache->saveCache(API_DOMAIN . "/quoc-gia", $countryFromApi); // Lưu cache
+	}
+	$countryFromApi = json_decode($countryFromApi);	
 ?>
 	<div class="crawl_main">
 		<div class="crawl_page">
@@ -261,7 +273,7 @@ function create_data($sourcePage, $url, $ophim_id, $ophim_update_time, $filterTy
 	} else {
 		$type	= "tv_series";
 	}
-	
+
 	$arrCat = [];
 	foreach ($sourcePage["movie"]["category"] as $key => $value) {
 		if(in_array($value["name"], $filterCategory))  {
