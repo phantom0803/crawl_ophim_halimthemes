@@ -7,4 +7,4 @@
   - Update 11/09/2022
     + Bộ lọc crawl
     + Cập nhật phim lên trang chủ khi phim có cập nhật mới
-    + Tự động sửa link play http - https
+    + Tự động sửa link play http - https khi crawl
