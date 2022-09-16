@@ -1,20 +1,20 @@
 jQuery(function ($) {
-  var filterType = JSON.parse(localStorage.getItem('filterType')) != null ? JSON.parse(localStorage.getItem('filterType')) : [];
-  var filterCategory = JSON.parse(localStorage.getItem('filterCategory')) != null ? JSON.parse(localStorage.getItem('filterCategory')) : [];
-  var filterCountry = JSON.parse(localStorage.getItem('filterCountry')) != null ? JSON.parse(localStorage.getItem('filterCountry')) : [];
-  $("input[name='filter_type[]']").each(function(){
-    if(filterType.includes($(this).val())) {
-      $(this).attr('checked', true);
+  var filterType = JSON.parse(localStorage.getItem("filterType")) != null ? JSON.parse(localStorage.getItem("filterType")) : [];
+  var filterCategory = JSON.parse(localStorage.getItem("filterCategory")) != null ? JSON.parse(localStorage.getItem("filterCategory")) : [];
+  var filterCountry = JSON.parse(localStorage.getItem("filterCountry")) != null ? JSON.parse(localStorage.getItem("filterCountry")) : [];
+  $("input[name='filter_type[]']").each(function () {
+    if (filterType.includes($(this).val())) {
+      $(this).attr("checked", true);
     }
   });
-  $("input[name='filter_category[]']").each(function(){
-    if(filterCategory.includes($(this).val())) {
-      $(this).attr('checked', true);
+  $("input[name='filter_category[]']").each(function () {
+    if (filterCategory.includes($(this).val())) {
+      $(this).attr("checked", true);
     }
   });
-  $("input[name='filter_country[]']").each(function(){
-    if(filterCountry.includes($(this).val())) {
-      $(this).attr('checked', true);
+  $("input[name='filter_country[]']").each(function () {
+    if (filterCountry.includes($(this).val())) {
+      $(this).attr("checked", true);
     }
   });
 
@@ -84,13 +84,13 @@ jQuery(function ($) {
     divMsgCrawlSuccess.show(300);
     divMsgCrawlError.show(300);
 
-    $("input[name='filter_type[]']:checked").each(function(){
+    $("input[name='filter_type[]']:checked").each(function () {
       inputFilterType.push($(this).val());
     });
-    $("input[name='filter_category[]']:checked").each(function(){
+    $("input[name='filter_category[]']:checked").each(function () {
       inputFilterCategory.push($(this).val());
     });
-    $("input[name='filter_country[]']:checked").each(function(){
+    $("input[name='filter_country[]']:checked").each(function () {
       inputFilterCountry.push($(this).val());
     });
 
@@ -142,31 +142,33 @@ jQuery(function ($) {
         if (currentList != "") currentList += "\n" + linkCurrent;
         else currentList += linkCurrent;
         textAreaResultError.val(currentList);
-      }
+
+        crawl_movies();
+      },
     });
   };
 
   $("input[name='filter_type[]']").change(() => {
     var saveFilterData = [];
-    $("input[name='filter_type[]']:checked").each(function(){
+    $("input[name='filter_type[]']:checked").each(function () {
       saveFilterData.push($(this).val());
     });
-    localStorage.setItem('filterType', JSON.stringify(saveFilterData));
-  })
+    localStorage.setItem("filterType", JSON.stringify(saveFilterData));
+  });
 
   $("input[name='filter_category[]']").change(() => {
     var saveFilterData = [];
-    $("input[name='filter_category[]']:checked").each(function(){
+    $("input[name='filter_category[]']:checked").each(function () {
       saveFilterData.push($(this).val());
     });
-    localStorage.setItem('filterCategory', JSON.stringify(saveFilterData));
-  })
+    localStorage.setItem("filterCategory", JSON.stringify(saveFilterData));
+  });
 
   $("input[name='filter_country[]']").change(() => {
     var saveFilterData = [];
-    $("input[name='filter_country[]']:checked").each(function(){
+    $("input[name='filter_country[]']:checked").each(function () {
       saveFilterData.push($(this).val());
     });
-    localStorage.setItem('filterCountry', JSON.stringify(saveFilterData));
-  })
+    localStorage.setItem("filterCountry", JSON.stringify(saveFilterData));
+  });
 });
