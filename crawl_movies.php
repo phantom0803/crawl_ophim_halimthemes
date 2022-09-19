@@ -49,7 +49,7 @@ function crawl_tools()
 		
 		<div class="crawl_filter notice notice-info">
 
-			<div class="filter_title"><strong>Định dạng</strong></div>
+			<div class="filter_title"><strong>Bỏ qua định dạng</strong></div>
 			<div class="filter_item">
 				<label><input type="checkbox" class="" name="filter_type[]" value="single"> Phim lẻ</label>
 				<label><input type="checkbox" class="" name="filter_type[]" value="series"> Phim bộ</label>
