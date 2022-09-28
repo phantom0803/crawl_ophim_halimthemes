@@ -2,6 +2,12 @@ jQuery(function ($) {
   var filterType = JSON.parse(localStorage.getItem("filterType")) != null ? JSON.parse(localStorage.getItem("filterType")) : [];
   var filterCategory = JSON.parse(localStorage.getItem("filterCategory")) != null ? JSON.parse(localStorage.getItem("filterCategory")) : [];
   var filterCountry = JSON.parse(localStorage.getItem("filterCountry")) != null ? JSON.parse(localStorage.getItem("filterCountry")) : [];
+
+  var timeout_from = JSON.parse(localStorage.getItem("timeout_from")) != null ? localStorage.getItem("timeout_from") : 1000;
+  var timeout_to = JSON.parse(localStorage.getItem("timeout_to")) != null ? localStorage.getItem("timeout_to") : 5000;
+  $("input[name=timeout_from]").val(timeout_from);
+  $("input[name=timeout_to]").val(timeout_to);
+
   $("input[name='filter_type[]']").each(function () {
     if (filterType.includes($(this).val())) {
       $(this).attr("checked", true);
@@ -135,7 +141,19 @@ jQuery(function ($) {
           else currentList += linkCurrent;
           textAreaResultError.val(currentList + "=====>>" + data.msg);
         }
-        crawl_movies();
+
+        var wait_timeout = 1000;
+        if (data.wait) {
+          let timeout_from = $("input[name=timeout_from]").val();
+          let timeout_to = $("input[name=timeout_to]").val();
+          let maximum = Math.max(timeout_from, timeout_to);
+          let minimum = Math.min(timeout_from, timeout_to);
+          wait_timeout = Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+        }
+        divMsgText.html(`Wait timeout ${wait_timeout}ms`);
+        setTimeout(() => {
+          crawl_movies();
+        }, wait_timeout);
       },
       error: function (xhr, ajaxOptions, thrownError) {
         let currentList = textAreaResultError.val();
@@ -170,5 +188,12 @@ jQuery(function ($) {
       saveFilterData.push($(this).val());
     });
     localStorage.setItem("filterCountry", JSON.stringify(saveFilterData));
+  });
+
+  $("input[name=timeout_from]").change((e) => {
+    localStorage.setItem("timeout_from", $("input[name=timeout_from]").val());
+  });
+  $("input[name=timeout_to]").change((e) => {
+    localStorage.setItem("timeout_to", $("input[name=timeout_to]").val());
   });
 });

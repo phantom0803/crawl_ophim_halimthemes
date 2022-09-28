@@ -86,6 +86,12 @@ function crawl_tools()
 			To <input type="number" name="page_to" value="1">
 			<div id="get_list_movies" class="primary">Get List Movies</div>
 		</div>
+
+		<div class="crawl_page">
+			Wait Timeout Random: From  <input type="number" name="timeout_from" value="">(ms) - 
+			To <input type="number" name="timeout_to" value=""> (ms)
+		</div>
+
 		<div class="crawl_page">
 			<div style="display: none" id="msg" class="notice notice-success">
 				<p id="msg_text"></p>
@@ -150,7 +156,7 @@ function crawl_ophim_movies()
 			'meta_query' => array(
 				array(
 					'key' => '_halim_metabox_options',
-					'value' => $url,
+					'value' => $ophim_id,
 					'compare' => 'LIKE'
 				)
 			)
@@ -181,7 +187,8 @@ function crawl_ophim_movies()
 							'status'   			=> true,
 							'post_id' 			=> null,
 							'list_episode' 	=> [],
-							'msg' 					=> 'Nothing needs updating!'
+							'msg' 					=> 'Nothing needs updating!',
+							'wait'					=> false
 						);
 						echo json_encode($result);
 						die();
@@ -213,7 +220,8 @@ function crawl_ophim_movies()
 						'status'				=> true,
 						'post_id' 			=> $post->ID,
 						'data'					=> $data,
-						'list_episode' 	=> $list_episode
+						'list_episode' 	=> $list_episode,
+						'wait'					=> true
 					);
 					wp_update_post($post);
 					echo json_encode($result);
@@ -232,7 +240,8 @@ function crawl_ophim_movies()
 				'post_id' 			=> null,
 				'data'					=> null,
 				'list_episode' 	=> null,
-				'msg' 					=> "Lọc bỏ qua"
+				'msg' 					=> "Lọc bỏ qua",
+				'wait'					=> false
 			);
 			echo json_encode($result);
 			die();
@@ -244,17 +253,19 @@ function crawl_ophim_movies()
 			'status'				=> true,
 			'post_id' 			=> $post_id,
 			'data'					=> $data,
-			'list_episode' 	=> $list_episode
+			'list_episode' 	=> $list_episode,
+			'wait'					=> true
 		);
 		echo json_encode($result);
 		die();
-  }catch (Exception $e) {
+  } catch (Exception $e) {
 		$result = array(
 			'status'				=> false,
 			'post_id' 			=> null,
 			'data'					=> null,
 			'list_episode' 	=> null,
-			'msg' 					=> "Crawl error"
+			'msg' 					=> "Crawl error",
+			'wait'					=> false
 		);
 		echo json_encode($result);
 		die();

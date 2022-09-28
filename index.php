@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Crawl OPHIM.CC
  * Description: Crawl + Update Dữ liệu từ OPhim.CC (WP - Halimthemes - 5.5.4)
- * Version: 1.1
+ * Version: 1.1.1
  * Author: Phantom0803@Ophim.Cc
  * Author URI: https://ophim.cc/
  */
@@ -15,8 +15,8 @@ function crawl_tools_script()
 {
 	global $pagenow;
 	if ('admin.php' == $pagenow && ($_GET['page'] == 'crawl-ophim-tools' || $_GET['page'] == 'crawl-tools')) {
-		wp_enqueue_script('crawl_tools_js', CRAWL_OPHIM_URL . 'assets/js/main.js');
-		wp_enqueue_style('crawl_tools_css', CRAWL_OPHIM_URL . 'assets/css/styles.css');
+		wp_enqueue_script('crawl_tools_js', CRAWL_OPHIM_URL . 'assets/js/main.js?v=1.1.1');
+		wp_enqueue_style('crawl_tools_css', CRAWL_OPHIM_URL . 'assets/css/styles.css?v=1.1.1');
 	} else {
 		return;
 	}
