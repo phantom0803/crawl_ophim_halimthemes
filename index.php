@@ -15,8 +15,8 @@ function crawl_tools_script()
 {
 	global $pagenow;
 	if ('admin.php' == $pagenow && ($_GET['page'] == 'crawl-ophim-tools' || $_GET['page'] == 'crawl-tools')) {
-		wp_enqueue_script('crawl_tools_js', CRAWL_OPHIM_URL . 'assets/js/main.js?v=1.1.1');
-		wp_enqueue_style('crawl_tools_css', CRAWL_OPHIM_URL . 'assets/css/styles.css?v=1.1.1');
+		wp_enqueue_script('crawl_tools_js', CRAWL_OPHIM_URL . 'assets/js/main.js?v=1.1.1.0');
+		wp_enqueue_style('crawl_tools_css', CRAWL_OPHIM_URL . 'assets/css/styles.css?v=1.1.1.0');
 	} else {
 		return;
 	}
