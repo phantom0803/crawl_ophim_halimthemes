@@ -299,6 +299,7 @@ function create_data($sourcePage, $url, $ophim_id, $ophim_update_time, $filterTy
 	}
 	if($sourcePage["movie"]["type"] == "hoathinh") {
 		array_push($arrCat, "Hoạt Hình");
+		$type = (count(reset($sourcePage["episodes"])['server_data'] ?? []) > 1 ? 'series' : 'single');
 	}
 	if($sourcePage["movie"]["type"] == "tvshows") {
 		array_push($arrCat, "TV Shows");
@@ -489,6 +490,7 @@ function get_list_episode($sourcePage, $post_id)
 					"halimmovies_ep_listsv_name" => "#Dự Phòng"
 				);
 				array_push($ep_data['halimmovies_ep_listsv'], $subServerData);
+				
 				$server_info["halimmovies_server_data"][$slug_array] = $ep_data;
 			}
 			array_push($server_add, $server_info);
