@@ -3,8 +3,8 @@ jQuery(function ($) {
   var filterCategory = JSON.parse(localStorage.getItem("filterCategory")) != null ? JSON.parse(localStorage.getItem("filterCategory")) : [];
   var filterCountry = JSON.parse(localStorage.getItem("filterCountry")) != null ? JSON.parse(localStorage.getItem("filterCountry")) : [];
 
-  var timeout_from = JSON.parse(localStorage.getItem("timeout_from")) != null ? localStorage.getItem("timeout_from") : 1000;
-  var timeout_to = JSON.parse(localStorage.getItem("timeout_to")) != null ? localStorage.getItem("timeout_to") : 5000;
+  var timeout_from = localStorage.getItem("timeout_from") ? localStorage.getItem("timeout_from") : 1000;
+  var timeout_to = localStorage.getItem("timeout_to") ? localStorage.getItem("timeout_to") : 3000;
   $("input[name=timeout_from]").val(timeout_from);
   $("input[name=timeout_to]").val(timeout_to);
 

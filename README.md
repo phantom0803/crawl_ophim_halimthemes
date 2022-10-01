@@ -5,6 +5,7 @@
 
 ## CHANGELOGS
   - Update 01/10/2022
+    + Fix get data LocalStorage
     + Fix cào định dạng lẻ bộ phim hoạt hình
   - Update 28/09/2022
     + Thêm random timeout crawl mỗi phim
