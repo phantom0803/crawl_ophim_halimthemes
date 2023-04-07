@@ -436,6 +436,7 @@ function add_posts($data)
 
 function save_images($image_url, $post_id, $posttitle, $set_thumb = false)
 {
+	$image_url = str_replace('img.ophim1.com', 'img.hiephanhthienha.com', $image_url);
 	$file				 	= file_get_contents($image_url);
 	$postname 		= sanitize_title($posttitle);
 	$im_name 			= "$postname-$post_id.jpg";
