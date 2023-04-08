@@ -6,7 +6,7 @@
 ![Alt text](Screenshot-2023-04-08-141958.png?raw=true "Image Demo")
 
 ## CHANGELOGS
-  - Update 08/04/2022
+  - Update 08/04/2023
     + Thêm chức năng crawl tự động
     + Cập nhật tải hình ảnh
   - Update 01/10/2022
