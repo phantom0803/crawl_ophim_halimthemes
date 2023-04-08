@@ -1,22 +1,23 @@
 <?php
 /**
- * Plugin Name: Crawl OPHIM.CC
- * Description: Crawl + Update Dữ liệu từ OPhim.CC (WP - Halimthemes - 5.5.4)
- * Version: 1.1.1
- * Author: Phantom0803@Ophim.Cc
- * Author URI: https://ophim.cc/
+ * Plugin Name: Crawl OPHIM1.CC
+ * Description: Crawl + Update Dữ liệu từ OPhim1.CC (WP - Halimthemes - 5.5.4)
+ * Version: 1.2.0
+ * Author: Phantom0803@Ophim1.Cc
+ * Author URI: https://ophim1.cc/
  */
 set_time_limit(0);
-define('API_DOMAIN', 'https://ophim1.com');
 define('CRAWL_OPHIM_URL', plugin_dir_url(__FILE__));
 define('CRAWL_OPHIM_PATH', plugin_dir_path(__FILE__));
+define('CRAWL_OPHIM_PATH_SCHEDULE_JSON', CRAWL_OPHIM_PATH . 'schedule.json');
+require_once CRAWL_OPHIM_PATH . 'constant.php';
 
 function crawl_tools_script()
 {
 	global $pagenow;
 	if ('admin.php' == $pagenow && ($_GET['page'] == 'crawl-ophim-tools' || $_GET['page'] == 'crawl-tools')) {
-		wp_enqueue_script('crawl_tools_js', CRAWL_OPHIM_URL . 'assets/js/main.js?v=1.1.1.0');
-		wp_enqueue_style('crawl_tools_css', CRAWL_OPHIM_URL . 'assets/css/styles.css?v=1.1.1.0');
+		wp_enqueue_script('crawl_tools_js', CRAWL_OPHIM_URL . 'assets/js/main.js?v=1.2.0.0');
+		wp_enqueue_style('crawl_tools_css', CRAWL_OPHIM_URL . 'assets/css/styles.css?v=1.2.0.0');
 	} else {
 		return;
 	}

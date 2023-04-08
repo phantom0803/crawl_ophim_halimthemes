@@ -3,6 +3,11 @@ jQuery(function ($) {
   var filterCategory = JSON.parse(localStorage.getItem("filterCategory")) != null ? JSON.parse(localStorage.getItem("filterCategory")) : [];
   var filterCountry = JSON.parse(localStorage.getItem("filterCountry")) != null ? JSON.parse(localStorage.getItem("filterCountry")) : [];
 
+  var page_from = localStorage.getItem("page_from") ? localStorage.getItem("page_from") : 10;
+  var page_to = localStorage.getItem("page_to") ? localStorage.getItem("page_to") : 1;
+  $("input[name=page_from]").val(page_from);
+  $("input[name=page_to]").val(page_to);
+
   var timeout_from = localStorage.getItem("timeout_from") ? localStorage.getItem("timeout_from") : 1000;
   var timeout_to = localStorage.getItem("timeout_to") ? localStorage.getItem("timeout_to") : 3000;
   $("input[name=timeout_from]").val(timeout_from);
@@ -190,10 +195,89 @@ jQuery(function ($) {
     localStorage.setItem("filterCountry", JSON.stringify(saveFilterData));
   });
 
+  $("input[name=page_from]").change((e) => {
+    localStorage.setItem("page_from", $("input[name=page_from]").val());
+  });
+  $("input[name=page_to]").change((e) => {
+    localStorage.setItem("page_to", $("input[name=page_to]").val());
+  });
   $("input[name=timeout_from]").change((e) => {
     localStorage.setItem("timeout_from", $("input[name=timeout_from]").val());
   });
   $("input[name=timeout_to]").change((e) => {
     localStorage.setItem("timeout_to", $("input[name=timeout_to]").val());
   });
+
+
+  // Crawler Schedule
+  $("#save_crawl_ophim_schedule").on("click", () => {
+    let pageFrom = $("input[name=page_from]").val();
+    let pageTo = $("input[name=page_to]").val();
+    let filterType = [];
+    $("input[name='filter_type[]']:checked").each(function () {
+      filterType.push($(this).val());
+    });
+
+    let filterCategory = [];
+    $("input[name='filter_category[]']:checked").each(function () {
+      filterCategory.push($(this).val());
+    });
+
+    let filterCountry = [];
+    $("input[name='filter_country[]']:checked").each(function () {
+      filterCountry.push($(this).val());
+    });
+
+    $.ajax({
+      url: ajaxurl,
+      type: "POST",
+      data: {
+        action: "crawl_ophim_save_settings",
+        pageFrom,
+        pageTo,
+        filterType,
+        filterCategory,
+        filterCountry
+      },
+      success: function (res) {
+        alert("Lưu thành công!")
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        alert("Lưu cấu hình thất bại!");
+      },
+    });
+  })
+
+  $("#crawl_ophim_schedule_enable").on("click", (e) => {
+    let enable = $("#crawl_ophim_schedule_enable").is(":checked");
+    $.ajax({
+      url: ajaxurl,
+      type: "POST",
+      data: {
+        action: "crawl_ophim_schedule_enable",
+        enable
+      },
+      success: function (res) {
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+      },
+    });
+  })
+  $("#save_crawl_ophim_schedule_secret").on("click", (e) => {
+    let secret_key = $("input[name='crawl_ophim_schedule_secret']").val();
+    $.ajax({
+      url: ajaxurl,
+      type: "POST",
+      data: {
+        action: "save_crawl_ophim_schedule_secret",
+        secret_key
+      },
+      success: function (res) {
+        alert("Lưu thành công!");
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        alert("Lưu thất bại!");
+      },
+    });
+  })
 });

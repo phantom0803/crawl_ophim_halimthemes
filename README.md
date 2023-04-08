@@ -1,9 +1,14 @@
 # PLUGINS CRAWL OPHIM
   - Test trên bản Halimthemes 5.5.4 Nulled
 
-![Alt text](Screenshot-2022-09-11-170506.png?raw=true "Image Demo")
+![Alt text](Screenshot-2023-04-08-141930.png?raw=true "Image Demo")
+
+![Alt text](Screenshot-2023-04-08-141958.png?raw=true "Image Demo")
 
 ## CHANGELOGS
+  - Update 08/04/2022
+    + Thêm chức năng crawl tự động
+    + Cập nhật tải hình ảnh
   - Update 01/10/2022
     + Fix get data LocalStorage
     + Fix cào định dạng lẻ bộ phim hoạt hình
