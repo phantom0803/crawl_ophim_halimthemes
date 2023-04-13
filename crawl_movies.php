@@ -340,10 +340,12 @@ function crawl_ophim_movies_handle($url, $ophim_id, $ophim_update_time, $filterT
 					$sourcePage 	= json_decode($sourcePage, true);
 					$data 				= create_data($sourcePage, $url, $ophim_id, $ophim_update_time);
 
+					$status = getStatus($data['status']);
+
 					// Re-Update Movies Info
 					$formality 																					= ($data['type'] == 'tv_series') ? 'tv_series' : 'single_movies';
 					$_halim_metabox_options["halim_movie_formality"] 		= $formality;
-					$_halim_metabox_options["halim_movie_status"] 			= strtolower($data['status']);
+					$_halim_metabox_options["halim_movie_status"] 			= $status;
 					$_halim_metabox_options["fetch_info_url"] 					= $data['fetch_url'];
 					$_halim_metabox_options["fetch_ophim_update_time"] 	= $data['fetch_ophim_update_time'];
 					$_halim_metabox_options["halim_original_title"] 		= $data['org_title'];
@@ -525,16 +527,15 @@ function add_posts($data)
 	save_images($data['thumbnail'], $post_id, $data['title'], true);
 	$thumb_image_url 		= get_the_post_thumbnail_url($post_id, 'movie-thumb');
 
-	if (isset($data['status'])) {
-		wp_set_object_terms($post_id, $data['status'], 'status', false);
-	}
+	$status = getStatus($data['status']);
+	wp_set_object_terms($post_id, $status, 'status', false);
 
 	$post_format 				= halim_get_post_format_type($formality);
 	set_post_format($post_id, $post_format);
 
 	$post_meta_movies = array(
 		'halim_movie_formality' 		=> $formality,
-		'halim_movie_status'    		=> strtolower($data['status']),
+		'halim_movie_status'    		=> $status,
 		'fetch_info_url'						=> $data['fetch_url'],
 		'fetch_ophim_id'						=> $data['fetch_ophim_id'],
 		'fetch_ophim_update_time'		=> $data['fetch_ophim_update_time'],
@@ -663,4 +664,20 @@ function slugify($str, $divider = '-')
 	$str = preg_replace('/[^a-z0-9-\s]/', '', $str);
 	$str = preg_replace('/([\s]+)/', $divider, $str);
 	return $str;
+}
+
+function getStatus($status) {
+	$hl_status = "completed";
+	switch (strtolower($status)) {
+		case 'ongoing':
+			$hl_status = "ongoing";
+			break;
+		case 'completed':
+			$hl_status = "completed";
+			break;
+		default:
+			$hl_status = "is_trailer";
+			break;
+	}
+	return $hl_status;
 }
